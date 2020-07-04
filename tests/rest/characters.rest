@@ -1,0 +1,36 @@
+GET http://localhost:3000/characters/
+Authorization: Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmQwMzdjNDMxY2IzMDVlMDFlMzc3ZiIsImVtYWlsIjoidG9ueUBzdGFyay5uZXQiLCJjcmVhdGVkQXQiOiIyMDIwLTA3LTAxVDIxOjQzOjI0LjkyN1oiLCJpYXQiOjE1OTM3Mjg0Mzd9.PqlJFfhU4eFkMOc3HhqcnJwXiltzpKDXXCQZYX8tADQ
+
+###
+GET http://localhost:3000/characters/5efccf888488c72ce42090a1
+Authorization: Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmQwMzdjNDMxY2IzMDVlMDFlMzc3ZiIsImVtYWlsIjoidG9ueUBzdGFyay5uZXQiLCJjcmVhdGVkQXQiOiIyMDIwLTA3LTAxVDIxOjQzOjI0LjkyN1oiLCJpYXQiOjE1OTM3Mjg0Mzd9.PqlJFfhU4eFkMOc3HhqcnJwXiltzpKDXXCQZYX8tADQ
+
+###
+POST http://localhost:3000/characters
+Authorization: Bearer: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZmQwMzdjNDMxY2IzMDVlMDFlMzc3ZiIsImVtYWlsIjoidG9ueUBzdGFyay5uZXQiLCJjcmVhdGVkQXQiOiIyMDIwLTA3LTAxVDIxOjQzOjI0LjkyN1oiLCJpYXQiOjE1OTM3Mjg0Mzd9.PqlJFfhU4eFkMOc3HhqcnJwXiltzpKDXXCQZYX8tADQ
+Content-Type: application/json
+
+{
+  "owner": "5efccf888488c72ce42090a1",
+  "name": "Tommy",
+  "heritage": "Human",
+  "traits": [
+    "Stubborn",
+    "Strong",
+    "Fast",
+    "Tough"
+  ],
+  "proficiency": "Light",
+  "mastery": "Clubs"
+}
+
+###
+PATCH http://localhost:3000/characters/5efccf888488c72ce42090a1
+Content-Type: application/json
+
+{
+  "name": "Timmy"
+}
+
+###
+DELETE http://localhost:3000/characters/5efccf888488c72ce42090a1

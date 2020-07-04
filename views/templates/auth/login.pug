@@ -1,0 +1,11 @@
+template(id='login-form-template')
+  div(class='card my-4')
+    div(class='card-body')
+      form(id='login-form')
+        div(class='form-group')
+          label(for='email') Email:
+          input(class='form-control' type='text' id='email' name='email' placeholder='email@domain.com')
+        div(class='form-group')
+          label(for='password') Password: 
+          input(class='form-control' type='password' id='password' name='password')
+        input(type='submit' class='btn btn-primary btn-block' value='Login')

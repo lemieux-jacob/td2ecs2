@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  div(id='app')
+
+  //-- Auth Templates
+  include ./templates/auth/login
+  include ./templates/auth/register
+  
+  //-- Character Templates
+  include ./templates/characters/form
+  include ./templates/characters/sheet
+  include ./templates/characters/listview
