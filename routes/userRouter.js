@@ -40,6 +40,9 @@ router.post('/register', async (req, res) => {
  */
 
 router.post('/login', async (req, res) => {
+  return send({
+    'message': 'here'
+  })
   let user, result
 
   // Get User from DB
