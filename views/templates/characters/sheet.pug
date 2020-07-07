@@ -1,3 +1,19 @@
 template(id='character-sheet-template')
   div(id='character-sheet')
-  
+    div(class='card my-2' id='character-sheet')
+      div(class='card-header') Character Sheet
+      div(class='card-body')
+        ul(class='list-group')
+          li(class='list-group-item') Name:
+            span(class='form-control' id='name')
+          li(class='list-group-item') Heritage:
+            span(class='form-control' id='heritage')
+          li(class='list-group-item') Traits:
+            ul(class='list-group' id='traits')
+          li(class='list-group-item') Proficiency:
+            span(class='form-control' id='proficiency')
+          li(class='list-group-item') Mastery:
+            span(class='form-control' id='mastery')
+      div(class='card-footer p-0 d-flex')
+        button(class='ecBtn btn btn-outline-primary ml-auto') Edit
+        button(class='dcBtn btn btn-outline-danger ml-1') Delete

@@ -1,2 +1,8 @@
 template(id='character-listview-template')
-  div(id='character-listview')
+  div(class='card my-2')
+    div(class='card-body')
+      span(class='descriptor')
+    div(class='card-footer p-0 d-flex')
+      button(class='vcsBtn btn btn-outline-primary') Character Sheet
+      button(class='ecBtn btn btn-outline-primary ml-auto') Edit
+      button(class='dcBtn btn btn-outline-danger ml-1') Delete

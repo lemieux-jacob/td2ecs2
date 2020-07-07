@@ -1,0 +1,46 @@
+{
+  "heritages": {
+    "Human": {
+      "basehp": 6,
+      "trait": "Versatile - Choose Another"
+    },
+    "Fey": {
+      "basehp": 6,
+      "trait": "Heritage: Bow Master"
+    },
+    "Dwarf": {
+      "basehp": 8,
+      "trait": "Heritage: Dark Vision"
+    },
+    "Goblin": {
+      "basehp": 4,
+      "trait": "Heritage: Goblin Agility"
+    },
+    "Ice Salimar": {
+      "basehp": 5,
+      "trait": "Heritage: Cryothermic Healing"
+    },
+    "Fire Salimar": {
+      "basehp": 5,
+      "trait": "Heritage: Pyrothermic Healing"
+    },
+    "Treefolk": {
+      "basehp": 9,
+      "trait": "Heritage: Ancient Heart"
+    },
+    "Karhu": {
+      "basehp": 7,
+      "trait": "Heritage: Powerful Claws"
+    },
+    "Lizardfolk": {
+      "basehp": 6,
+      "trait": "Heritage: Cold Blooded"
+    }
+  },
+  "proficiencies": [
+    "Light",
+    "Heavy",
+    "Ranged",
+    "Magic"
+  ]
+}

@@ -9,6 +9,21 @@ const authorizeToken = function (req, res, next) {
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) return res.sendStatus(403)
     req.user = user
+    next()
+  })
+}
+
+// Verify Access Token (For User Status)
+const verifyToken = function (req, res, next) {
+  const token = getToken(req)
+
+  if (token == null) {
+    return next()
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403)
+    req.user = user
     console.log(user)
     next()
   })
@@ -20,7 +35,7 @@ const getToken = function (req) {
     req.query.token || // Get
     req.body.token || // Post
     req.cookies.token // Cookie
-  const token = raw && raw.split(' ')[1]
+  const token = raw && raw.split(' ')[1] || raw
   return token
 }
 
@@ -37,5 +52,6 @@ const generateToken = function (user, secret, expires) {
 
 module.exports = {
   'generate': generateToken,
-  'auth': authorizeToken
+  'auth': authorizeToken,
+  'status': verifyToken
 }

@@ -1,17 +1,27 @@
 template(id='character-form-template')
-  form(id='character-form')
-    div(class='form-group')
-      label(for='name') Name:
-      input(class='form-group' type='text' id='name' name='name')
-    div(class='form-group')
-      label(for='heritage') Heritage:
-      input(class='form-group' type='text' id='heritage' name='heritage')
-    div(class='form-group')
-      label(for='traits') Traits:
-    div(class='form-group')
-      label(for='pro')
-      select(class='form-group' id='pro' name='pro')
-        option(value='') -- Select One --
-    div(class='form-group')
-      label(for='mastery') Mastery:
-      input(class='form-group' type='text' id='mastery' name='mastery')
+  div(class='card my-4')
+    div(class='card-header') Create / Edit Character
+    div(class='card-body')
+      form(id='character-form')
+        div(class='form-group')
+          label(for='name') Name:
+          input(class='form-control' type='text' id='name' name='name')
+        div(class='form-group')
+          label(for='heritage') Heritage:
+          select(class='form-control' id='heritage' name='heritage')
+            each val, key in heritages
+              option(value=key)= key
+        div(class='form-group')
+          label(for='traits') Traits:
+          div(id='traits')
+        div(class='form-group')
+          label(for='proficiency') Proficiency: 
+          select(class='form-control' id='proficiency' name='proficiency')
+            option(value='') -- Select One --
+            each val in proficiencies
+              option(value=val)= val
+        div(class='form-group')
+          label(for='mastery') Mastery:
+          input(class='form-control' type='text' id='mastery' name='mastery')
+        input(type='hidden' id='cid' name='cid' value)
+        input(type='submit' class='btn btn-primary btn-block' value='Save Character')

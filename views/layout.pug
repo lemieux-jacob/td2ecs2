@@ -14,11 +14,9 @@ html(lang="en")
             span(class='navbar-toggler-icon')
           div(class='collapse navbar-collapse' id='nsc')
             div(class='navbar-nav ml-auto')
-              if (user)
-                button(class='btn btn-outline-secondary' id='logoutBtn') Logout
-              else
-                button(class='btn btn-outline-secondary' id='loginBtn') Login
-                button(class='btn btn-outline-secondary' id='registerBtn') Register
+              button(class='hidden btn btn-outline-secondary' id='logoutBtn') Logout
+              button(class='btn btn-outline-secondary' id='loginBtn') Login
+              button(class='btn btn-outline-secondary' id='registerBtn') Register
     div(class='container')
       main
         block content

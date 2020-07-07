@@ -7,8 +7,11 @@ const token = require('../modules/token')
 /** 
  * User Status
  */
-router.get('/status', async (req, res) => {
-  //
+router.get('/status', token.status, async (req, res) => {
+  return res.json(
+    req.user || {
+      'status': 'logged out'
+    })
 })
 
 /**
@@ -51,7 +54,7 @@ router.post('/login', async (req, res) => {
   }
 
   if (user == null) {
-    return set.status('404').json({
+    return res.status('404').json({
       message: 'Cannot find User'
     })
   }
@@ -80,9 +83,21 @@ router.post('/login', async (req, res) => {
     createdAt: user.createdAt
   }, process.env.ACCESS_TOKEN_SECRET)
 
+  // Generate Refresh Token
+  const refreshToken = token.generate({
+    id: user._id,
+    email: user.email,
+    createdAt: user.createdAt
+  }, process.env.REFRESH_TOKEN_SECRET)
+
   // Set Access Token Cookie
   res.cookie('token', accessToken, {
-    // httpOnly: true
+    httpOnly: true
+  })
+
+  // Set Refresh Token Cookie
+  res.cookie('refresh', refreshToken, {
+    httpOnly: true
   })
 
   // Send User Data sans Password
@@ -99,8 +114,9 @@ router.post('/login', async (req, res) => {
  * Logout User
  */
 router.get('/logout', (req, res) => {
+  res.clearCookie('refresh')
   res.clearCookie('token')
-  res.json({
+  res.status('200').json({
     message: 'Logged Out'
   })
 })

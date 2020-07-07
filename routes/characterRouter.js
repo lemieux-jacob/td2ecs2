@@ -9,7 +9,7 @@ router.use(require('../modules/token').auth)
 router.get('/', async (req, res) => {
   try {
     const characters = await Character.find({
-      owner: req.user._id
+      owner: req.user.id
     })
     res.json(characters)
   } catch (err) {
@@ -21,14 +21,13 @@ router.get('/', async (req, res) => {
 
 // Get One
 router.get('/:id', getCharacter, async (req, res) => {
-  res.json(res.character)
+  res.json(req.character)
 })
 
 // Create
 router.post('/', async (req, res) => {
-  console.log(req.user._id)
   const character = new Character({
-    'owner': req.user._id,
+    'owner': req.user.id,
     'name': req.body.name,
     'heritage': req.body.heritage,
     'traits': req.body.traits,
@@ -57,11 +56,11 @@ router.patch('/:id', getCharacter, async (req, res) => {
   ]
   props.forEach(prop => {
     if (req.body[prop] != null) {
-      res.character.name = req.body[prop]
+      req.character[prop] = req.body[prop]
     }
   })
   try {
-    const updatedCharacter = await res.character.save()
+    const updatedCharacter = await req.character.save()
     res.json(updatedCharacter)
   } catch (err) {
     res.status('400').json({
@@ -73,7 +72,7 @@ router.patch('/:id', getCharacter, async (req, res) => {
 // Delete
 router.delete('/:id', getCharacter, async (req, res) => {
   try {
-    await res.character.remove()
+    await req.character.remove()
     res.json({
       message: 'Deleted Character'
     })
@@ -96,7 +95,7 @@ async function getCharacter(req, res, next) {
       })
     }
     // Verify the Authenticated User owns Character
-    if (req.user._id != character.owner) {
+    if (req.user.id != character.owner) {
       return res.status('404').json({
         message: 'Action is Unauthorized'
       })
@@ -106,7 +105,7 @@ async function getCharacter(req, res, next) {
       message: err.message
     })
   }
-  res.character = character
+  req.character = character
   next()
 }
 
