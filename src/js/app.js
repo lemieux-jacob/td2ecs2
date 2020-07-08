@@ -104,7 +104,9 @@ function parseFormData(formData) {
       data[entry[0]] = entry[1]
     }
   }
-  data.traits = traits
+  if (traits.length > 0) {
+    data.traits = traits
+  }
   return data
 }
 
