@@ -8,7 +8,7 @@ const registerBtn = document.getElementById('registerBtn')
 const logoutBtn = document.getElementById('logoutBtn')
 
 // Character Controls
-const controls = document.getElementById('controls')
+const appControls = document.getElementById('controls')
 const viewCharactersBtn = document.getElementById('viewCharactersBtn')
 const createChracterBtn = document.getElementById('createCharacterBtn')
 
@@ -57,9 +57,9 @@ async function start() {
     show(registerBtn)
     hide(logoutBtn)
 
-    hide(controls)
+    hide(appControls)
 
-    return app.innerHTML = `<div class='my-2'><p>Welcome to my Tiny Dungeon 2E Character Sheet App</p></div>`
+    return app.innerHTML = `<div class='my-2'><p>Welcome to my Tiny Dungeon 2E Character Sheet App - Please Login</p></div>`
   }
 
   // User is Logged In
