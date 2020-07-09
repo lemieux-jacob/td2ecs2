@@ -2,7 +2,7 @@
   "heritages": {
     "Human": {
       "basehp": 6,
-      "trait": "Versatile - Choose Another"
+      "trait": "Heritage: Versatile"
     },
     "Fey": {
       "basehp": 6,

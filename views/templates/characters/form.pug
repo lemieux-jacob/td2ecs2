@@ -5,23 +5,27 @@ template(id='character-form-template')
       form(id='character-form')
         div(class='form-group')
           label(for='name') Name:
-          input(class='form-control' type='text' id='name' name='name')
+          input(class='form-control' type='text' id='name' name='name' required)
         div(class='form-group')
           label(for='heritage') Heritage:
-          select(class='form-control' id='heritage' name='heritage')
+          select(class='form-control' id='heritage' name='heritage' required)
+            option(value='') -- Select One --
             each val, key in heritages
               option(value=key)= key
         div(class='form-group')
           label(for='traits') Traits:
           div(id='traits')
+            input(id='htrait' class='trait form-control' name='traits[]' required readonly=true)
+          div(id='trait-controls')
+            button(id='addTraitBtn' type='button' class='btn btn-outline-primary btn-block') Add Trait
         div(class='form-group')
           label(for='proficiency') Proficiency: 
-          select(class='form-control' id='proficiency' name='proficiency')
+          select(class='form-control' id='proficiency' name='proficiency' required)
             option(value='') -- Select One --
             each val in proficiencies
               option(value=val)= val
         div(class='form-group')
           label(for='mastery') Mastery:
-          input(class='form-control' type='text' id='mastery' name='mastery')
+          input(class='form-control' type='text' id='mastery' name='mastery' required)
         input(type='hidden' id='cid' name='cid' value)
         input(type='submit' class='btn btn-primary btn-block' value='Save Character')

@@ -7,6 +7,11 @@ const loginBtn = document.getElementById('loginBtn')
 const registerBtn = document.getElementById('registerBtn')
 const logoutBtn = document.getElementById('logoutBtn')
 
+// Character Controls
+const controls = document.getElementById('controls')
+const viewCharactersBtn = document.getElementById('viewCharactersBtn')
+const createChracterBtn = document.getElementById('createCharacterBtn')
+
 // Enable User Controls
 loginBtn.onclick = (e) => {
   viewLoginForm()
@@ -18,10 +23,21 @@ logoutBtn.onclick = (e) => {
   handleLogout()
 }
 
+// Enable Character Controls
+viewCharactersBtn.onclick = (e) => {
+  clearApp()
+  start()
+}
+
+createChracterBtn.onclick = (e) => {
+  viewCharacterForm()
+}
+
 start() // Start the Application
 
 // Main
 async function start() {
+  // Check User is Logged In
   const status = await fetch(url + '/users/status')
     .then(res => res.json())
     .then(user => {
@@ -41,13 +57,17 @@ async function start() {
     show(registerBtn)
     hide(logoutBtn)
 
-    return app.innerHTML = `<p>Welcome to my Tiny Dungeon 2E Character Sheet App</p>`
+    hide(controls)
+
+    return app.innerHTML = `<div class='my-2'><p>Welcome to my Tiny Dungeon 2E Character Sheet App</p></div>`
   }
 
   // User is Logged In
   hide(loginBtn)
   hide(registerBtn)
   show(logoutBtn)
+
+  show(controls)
 
   // Get Characters for User
   viewCharacters()
@@ -213,8 +233,11 @@ async function viewCharacterForm(character_id) {
   const instance = template('character-form')
   const form = instance.querySelector('#character-form')
   const traits = instance.querySelector('#traits')
+  const heritage = instance.querySelector('#heritage')
+  const addTraitBtn = instance.querySelector('#addTraitBtn')
 
   if (typeof character_id !== 'undefined') {
+    // Edit Only Logic
     let character
     // Get Character from API
     try {
@@ -233,25 +256,49 @@ async function viewCharacterForm(character_id) {
 
     // Populate Traits
     character.traits.forEach(trait => {
-      let input = document.createElement('input')
-      input.className = 'form-control'
-      input.name = 'traits[]'
-      input.value = trait
-      traits.appendChild(input)
+      let input
+      if (trait.includes('Heritage:')) {
+        input = instance.querySelector('#htrait')
+        input.value = trait
+        input.readOnly = true
+      } else {
+        input = createRemovableInput('traits[]', {
+          class: 'form-control',
+          value: trait
+        })
+        traits.appendChild(input)
+      }
     })
 
-    const method = document.createElement('input')
-    method.type = 'hidden'
-    method.name = 'method'
-    method.value = 'PATCH'
+    const method = createInput('method', {
+      type: 'hidden',
+      value: 'Patch'
+    })
     form.appendChild(method)
+  } else {
+    // Creation Only Logic
+    for (let i = 0; i < 3; i++) {
+      let input = createRemovableInput('traits[]', {
+        class: 'trait'
+      })
+      traits.appendChild(input)
+    }
   }
 
-  const heritage = instance.querySelector('#heritage')
+  addTraitBtn.onclick = (e) => {
+    let count = traits.querySelectorAll('.trait').length
+    if (count >= 7) return false
+    let input = createRemovableInput('traits[]', {
+      class: 'trait'
+    })
+    traits.appendChild(input)
+  }
 
   heritage.onchange = async (e) => {
     let input = traits.firstChild;
-    input.value = data.heritages[heritage.value].trait
+    let htrait
+    if (heritage.value != '') htrait = data.heritages[heritage.value].trait
+    input.value = htrait || ''
   }
 
   form.onsubmit = (e) => {
@@ -262,10 +309,46 @@ async function viewCharacterForm(character_id) {
   render(instance)
 }
 
+// Create Removable Input
+function createRemovableInput(name, options = {}) {
+  let div = document.createElement('div')
+  let button = document.createElement('button')
+  let span = document.createElement('span')
+  let input = createInput(name, options)
+  // Configure Button
+  span.className = 'fas fa-times'
+  button.appendChild(span)
+  button.type = 'button'
+  button.className = 'btn btn-outline-danger'
+  button.onclick = (e) => {
+    e.currentTarget.parentNode.remove()
+  }
+  // Configure Div
+  div.className = 'd-flex'
+  div.appendChild(input)
+  div.appendChild(button)
+  return div
+}
+
+// Create Input
+function createInput(name, options = {}) {
+  let input = document.createElement('input')
+  typeof name != 'undefined' ? input.name = name : null
+  typeof options.type != 'undefined' ? input.type = options.type : null
+  typeof options.value != 'undefined' ? input.value = options.value : null
+  typeof options.class != 'undefined' ? input.className = options.class : null
+  // All Fields are Required Unless otherwise specified
+  typeof options.required != 'undefined' ? input.required = options.required : input.required = true
+  input.classList.add('form-control')
+  return input
+}
+
 // Create or Update a Character via the API
 function saveCharacter(form, character_id) {
   const formData = parseFormData(new FormData(form))
-  fetch(url + '/characters/' + character_id || '', {
+  let endpoint = url + '/characters/'
+  if (character_id) endpoint += character_id
+  fetch(endpoint, {
       method: formData.method || 'POST',
       headers: {
         'Content-Type': 'application/json'

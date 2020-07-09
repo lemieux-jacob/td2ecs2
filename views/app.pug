@@ -1,7 +1,11 @@
 extends layout
 
 block content
-  div(id='app')
+  div(id='controls' class='my-2 d-flex hidden')
+    button(id='viewCharactersBtn' class='btn btn-primary') View Characters
+    button(id='createCharacterBtn' class='btn btn-primary ml-2') Create Character
+    
+  div(id='app' class='my-2')
 
   //-- Auth Templates
   include ./templates/auth/login

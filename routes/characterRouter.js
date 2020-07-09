@@ -47,6 +47,8 @@ router.post('/', async (req, res) => {
 
 // Update
 router.patch('/:id', getCharacter, async (req, res) => {
+  // Ensure Current User owns Character
+  if (req.user.id !== req.character.owner) return res.status('401')
   let props = [
     'name',
     'heritage',
