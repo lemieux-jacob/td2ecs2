@@ -236,6 +236,14 @@ async function viewCharacterForm(character_id) {
   const heritage = instance.querySelector('#heritage')
   const addTraitBtn = instance.querySelector('#addTraitBtn')
 
+  const maxhpInput = instance.querySelector('#maxhp')
+  const basehpInput = instance.querySelector('#basehp')
+  const hpmodInput = instance.querySelector('#hpmod')
+
+  function adjustHP(e) {
+    maxhpInput.value = parseInt(basehpInput.value) + parseInt(hpmodInput.value) || 0
+  }
+
   if (typeof character_id !== 'undefined') {
     // Edit Only Logic
     let character
@@ -252,7 +260,11 @@ async function viewCharacterForm(character_id) {
     instance.querySelector('#heritage').value = character.heritage
     instance.querySelector('#proficiency').value = character.proficiency
     instance.querySelector('#mastery').value = character.mastery
-    instance.querySelector('#cid').value = character.character_id
+    instance.querySelector('#cid').value = character_id
+    instance.querySelector('#basehp').value = data.heritages[character.heritage].basehp
+    instance.querySelector('#hpmod').value = character.hpmod
+
+    adjustHP()
 
     // Populate Traits
     character.traits.forEach(trait => {
@@ -272,7 +284,7 @@ async function viewCharacterForm(character_id) {
 
     const method = createInput('method', {
       type: 'hidden',
-      value: 'Patch'
+      value: 'PATCH'
     })
     form.appendChild(method)
   } else {
@@ -294,17 +306,30 @@ async function viewCharacterForm(character_id) {
     traits.appendChild(input)
   }
 
-  heritage.onchange = async (e) => {
-    let input = traits.firstChild;
+  heritage.onchange = (e) => {
+    let htraitInput = traits.firstChild
     let htrait
+    let basehp
+
     if (heritage.value != '') htrait = data.heritages[heritage.value].trait
-    input.value = htrait || ''
+    if (heritage.value != '') basehp = data.heritages[heritage.value].basehp
+
+    basehpInput.value = basehp || 0
+    adjustHP()
+    htraitInput.value = htrait || ''
   }
 
-  form.onsubmit = (e) => {
-    e.preventDefault()
-    saveCharacter(form, character_id || null)
+  hpmodInput.onchange = function (e) {
+    adjustHP(e);
   }
+
+  form.onsubmit = async (e) => {
+    e.preventDefault()
+    const dataObj = parseFormData(new FormData(form))
+    let char = await saveCharacter(dataObj, character_id || null)
+    viewCharacterSheet(character_id)
+  }
+
   clearApp()
   render(instance)
 }
@@ -344,22 +369,20 @@ function createInput(name, options = {}) {
 }
 
 // Create or Update a Character via the API
-function saveCharacter(form, character_id) {
-  const formData = parseFormData(new FormData(form))
+async function saveCharacter(dataObj, character_id) {
   let endpoint = url + '/characters/'
   if (character_id) endpoint += character_id
-  fetch(endpoint, {
-      method: formData.method || 'POST',
+  const character = await fetch(endpoint, {
+      method: dataObj.method || 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(formData)
+      body: JSON.stringify(dataObj)
     })
     .then(res => res.json())
-    .then(character => {
-      viewCharacterSheet(character._id)
-    })
     .catch(err => console.log(err.message))
+  if (typeof character == 'undefined') return false
+  return character
 }
 
 // Delete a Character via the API
@@ -383,11 +406,16 @@ async function viewCharacterSheet(character_id) {
     return console.err(err.message)
   }
 
+  const hpEl = instance.querySelector('#hp')
+
   // Populate Sheet
   instance.querySelector('#name').innerText = character.name
   instance.querySelector('#heritage').innerText = character.heritage
   instance.querySelector('#proficiency').innerText = character.proficiency
   instance.querySelector('#mastery').innerText = character.mastery
+  instance.querySelector('#maxhp').innerText = character.maxhp
+
+  hpEl.innerText = character.hp
 
   const traitsEl = instance.querySelector('#traits')
 
@@ -397,6 +425,28 @@ async function viewCharacterSheet(character_id) {
     li.innerText = trait
     traitsEl.appendChild(li)
   })
+
+  const hpplusBtn = instance.querySelector('#hpplus')
+  const hpminusBtn = instance.querySelector('#hpminus')
+
+  hpplusBtn.onclick = function (e) {
+    character.hp = character.hp < character.maxhp ? character.hp + 1 : character.hp
+    hpEl.innerText = character.hp
+    saveCharacter({
+      hp: character.hp,
+      method: 'PATCH'
+    }, character_id)
+  }
+
+  hpminusBtn.onclick = function (e) {
+    character.hp = character.hp > 0 ? character.hp - 1 : character.hp
+    hpEl.innerText = character.hp
+    saveCharacter({
+      hp: character.hp,
+      method: 'PATCH'
+    }, character_id)
+  }
+
   enableBtns(instance, character_id)
 
   clearApp()

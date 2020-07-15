@@ -30,6 +30,21 @@ const characterSchema = new Schema({
     type: String,
     required: true
   },
+  hp: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  maxhp: {
+    type: Number,
+    default: 0,
+    required: true
+  },
+  hpmod: {
+    type: Number,
+    default: 0,
+    required: true
+  },
   createdAt: {
     type: Date,
     required: true,

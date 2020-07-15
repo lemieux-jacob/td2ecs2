@@ -1,6 +1,6 @@
 template(id='character-sheet-template')
   div(id='character-sheet')
-    div(class='card my-2' id='character-sheet')
+    div(class='card my-2')
       div(class='card-header') Character Sheet
       div(class='card-body')
         ul(class='list-group')
@@ -14,6 +14,16 @@ template(id='character-sheet-template')
             span(class='form-control' id='proficiency')
           li(class='list-group-item') Mastery:
             span(class='form-control' id='mastery')
+          li(class='list-group-item') 
+            div HP:&nbsp;
+              span(id='hp')
+              span &nbsp;/&nbsp;
+              span(id='maxhp')
+            div(class='d-flex')
+              button(id='hpplus' class='btn btn-outline-primary')
+                span(class='fas fa-plus')
+              button(id='hpminus' class='btn btn-outline-danger ml-1')
+                span(class='fas fa-minus')
       div(class='card-footer p-0 d-flex')
         button(class='ecBtn btn btn-outline-primary ml-auto') Edit
         button(class='dcBtn btn btn-outline-danger ml-1') Delete

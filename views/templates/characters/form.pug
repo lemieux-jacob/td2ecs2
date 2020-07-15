@@ -12,6 +12,16 @@ template(id='character-form-template')
             option(value='') -- Select One --
             each val, key in heritages
               option(value=key)= key
+        div(class='d-flex')
+          div(class='form-group')
+            label(for='basehp') Base HP:
+            input(id='basehp' name='basehp' type='number' class='form-control' value='0' readonly=true)
+          div(class='form-group')
+            label(for='modifier') HP Modifier:
+            input(id='hpmod' name='hpmod' type='number' class='form-control' value='0')
+          div(class='form-group')
+            label(for='maxhp') Total HP:
+            input(id='maxhp' name='maxhp' type='number' class='form-control' value='0' readonly=true)
         div(class='form-group')
           label(for='traits') Traits:
           div(id='traits')
